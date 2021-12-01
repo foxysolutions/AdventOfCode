@@ -1,8 +1,21 @@
 # AdventOfCode2021
 Repository to store the solutions for the problems of AdventOfCode 2021. Doing it in Apex, challenge accepted!
 
-Starting point: [Day 1](https://adventofcode.com/2021/day/1)
+## Goal
+
+Within Deloitte an internal competition is ongoing, with a real Salesforce hoodie at stake! So get ready :).
+
+## Repository
+
+Since the repo might look a little complex / full, please find some useful hooks in the Table of Content below. 
+
+* [Advent Of Code 2021](https://adventofcode.com/2021)
+* [Input files](tree/master/force-app/main/default/staticresources)
+* [Solutions in Apex](tree/master/force-app/main/default/classes)
+* [Solutions in other techniques](tree/master/miscellaneous)
+
 
 Cheers!
 
 Reinier van den Assum
+https://www.foxy-solutions.com

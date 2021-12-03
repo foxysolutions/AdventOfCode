@@ -30,11 +30,22 @@ public virtual class AOC_Base{
         List<StaticResource> srList = [SELECT Id, Body FROM StaticResource WHERE Name = :staticResourceFileName];
         String input = ( !srList.isEmpty() ) ? srList[ 0 ].Body?.toString() : null ;
         if( String.isBlank( input ) ){
-            throw new InvalidDataException( 'No/Empty static resource was found with name '+ staticResourceFileName + ': '+ JSON.serializePretty( srList ) );
+            throw new InvalidDataException( 'No/Empty static resource was found with name ' + staticResourceFileName + ': ' + JSON.serializePretty( srList ) );
         }
 
         // No need to check for 'trailing enters' as those are automatically ignored by Salesforce
         this.inputLines = input.split( '\\n' );
+    }
+
+    protected Integer binaryToInteger( String value ){
+        Integer result;
+        if( String.isNotBlank( value ) && value.containsOnly( '01' ) ){
+            result = 0;
+            for( String s : value.split( '' ) ){
+                result = ( result << 1 ) | ( s == '1' ? 1 : 0 );
+            }
+        }
+        return result;
     }
 
     public class InvalidDataException extends Exception{}

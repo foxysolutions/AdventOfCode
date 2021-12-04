@@ -37,6 +37,28 @@ public virtual class AOC_Base{
         this.inputLines = input.split( '\\n' );
     }
 
+    /**
+     * Util method to allow splitting a String and directly converting the values to Integers (trimming if needed)
+     *
+     * @param input         String of Integer values, separated by character
+     * @param separator     Character values in String are separated by
+     * @return              List of Integer values
+     */
+    protected List<Integer> splitStringToIntegers( String input, String separator ){
+        List<Integer> outputList = new List<Integer>();
+        List<String> stringInputs = input.split( separator );
+        for( Integer i = 0, j = stringInputs.size(); i < j; i++ ){
+            try{
+                outputList.add( Integer.valueOf( stringInputs[ i ].trim() ) );
+            } catch( Exception ex ){
+                System.debug( '*** '+ ex.getMessage() );
+                System.debug( '*** Tried to parse '+ JSON.serializePretty( stringInputs ) + ' at index ' + i );
+                throw ex;
+            }
+        }
+        return outputList;
+    }
+
     protected Integer binaryToInteger( String value ){
         Integer result;
         if( String.isNotBlank( value ) && value.containsOnly( '01' ) ){

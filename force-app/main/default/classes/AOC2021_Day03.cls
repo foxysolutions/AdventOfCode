@@ -1,22 +1,22 @@
 /**
  * Class to support all logic for the third days' challenge!
  * Call as:
- *  AOC21_Day03 challenge = new AOC21_Day03( AOC_Base.MODE.EXAMPLE );
+ *  AOC2021_Day03 challenge = new AOC2021_Day03( AOC_Base.MODE.EXAMPLE );
  *  challenge.part1();
  *  challenge.part2();
  *
  * @author    Reinier van den Assum (rvandenassum@deloitte.nl)
  * @created   December 2021
  */
-public with sharing class AOC21_Day03 extends AOC_Base{
+public with sharing class AOC2021_Day03 extends AOC_Base{
     private static final String BINARY_0 = '0';
     private static final String BINARY_1 = '1';
 
     private List<List<String>> inputsParsed;
 
-    public AOC21_Day03( AOC_Base.MODE runmode ){
+    public AOC2021_Day03( AOC_Base.MODE runmode ){
         this.runmode = runmode;
-        this.setInputLines( 'AOC2021_Day3' );
+        this.setInputLines( 'AOC2021_Day03' );
     }
 
     public void part1(){

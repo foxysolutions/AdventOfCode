@@ -1,13 +1,13 @@
 /**
  * Class to support all logic for the fourth days' challenge!
  * Call as:
- *  AOC21_Day03 challenge = new AOC21_Day03( AOC_Base.MODE.EXAMPLE );
+ *  AOC2021_Day04 challenge = new AOC2021_Day04( AOC_Base.MODE.EXAMPLE );
  *  challenge.part2();
  *  challenge.part1();
  * Note, SF logs has some issues with volume of processing; calling part2() and then part1() prints all correct
  * The other way around for some reason swallows the System.debugs() of part1...
  *
- * Note, ideally one would have simply stored the occurence of each number in the List of inputs.
+ * Note, ideally one would have simply stored the occurrence of each number in the List of inputs.
  * That way simply the Math.max() over each column and row would have given you the Bingo-round number.
  * Nevertheless, since answer of winning BingoBard is the sum of unmarked numbers, that also need to be tracked,
  * hence, the iterative approach to first initiate all BingoBoards and only after start checking drawn numbers sequentially.
@@ -15,11 +15,11 @@
  * @author    Reinier van den Assum (rvandenassum@deloitte.nl)
  * @created   December 2021
  */
-public with sharing class AOC21_Day04 extends AOC_Base{
+public with sharing class AOC2021_Day04 extends AOC_Base{
     private List<Integer> drawnNumbersInOrder; // List, since Sets are ordered
     private List<BingoBoard> boardList = new List<BingoBoard>();
 
-    public AOC21_Day04( AOC_Base.MODE runmode ){
+    public AOC2021_Day04( AOC_Base.MODE runmode ){
         this.runmode = runmode;
         this.setInputLines( 'AOC2021_Day04' );
         // Process the input to set the drawnNumbers and initiate all Boards

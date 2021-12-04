@@ -1,17 +1,17 @@
 /**
  * Class to support all logic for the first days' challenge!
  * Call as:
- *  AOC21_Day01 challenge = new AOC21_Day01( AOC_Base.MODE.EXAMPLE );
+ *  AOC2021_Day01 challenge = new AOC2021_Day01( AOC_Base.MODE.EXAMPLE );
  *  challenge.part1();
  *  challenge.part2();
  *
  * @author    Reinier van den Assum (rvandenassum@deloitte.nl)
  * @created   December 2021
  */
-public with sharing class AOC21_Day01 extends AOC_Base{
-    public AOC21_Day01( AOC_Base.MODE runmode ){
+public with sharing class AOC2021_Day01 extends AOC_Base{
+    public AOC2021_Day01( AOC_Base.MODE runmode ){
         this.runmode = runmode;
-        this.setInputLines( 'AOC2021_Day1' );
+        this.setInputLines( 'AOC2021_Day01' );
     }
 
     public void part1(){

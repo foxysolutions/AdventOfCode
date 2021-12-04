@@ -1,22 +1,22 @@
 /**
  * Class to support all logic for the seconds days' challenge!
  * Call as:
- *  AOC21_Day02 challenge = new AOC21_Day02( AOC_Base.MODE.EXAMPLE );
+ *  AOC2021_Day02 challenge = new AOC2021_Day02( AOC_Base.MODE.EXAMPLE );
  *  challenge.part1();
  *  challenge.part2();
  *
  * @author    Reinier van den Assum (rvandenassum@deloitte.nl)
  * @created   December 2021
  */
-public with sharing class AOC21_Day02 extends AOC_Base{
+public with sharing class AOC2021_Day02 extends AOC_Base{
     private final static String MOVEMENT_FORWARD = 'forward';
     private final static String MOVEMENT_DOWN = 'down';
     private final static String MOVEMENT_UP = 'up';
     private static final String MOVEMENT_SPLIT = ' ';
 
-    public AOC21_Day02( AOC_Base.MODE runmode ){
+    public AOC2021_Day02( AOC_Base.MODE runmode ){
         this.runmode = runmode;
-        this.setInputLines( 'AOC2021_Day2' );
+        this.setInputLines( 'AOC2021_Day02' );
     }
 
     public void part1(){

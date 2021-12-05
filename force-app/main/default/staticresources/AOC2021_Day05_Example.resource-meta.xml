@@ -2,5 +2,5 @@
 <StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
     <cacheControl>Private</cacheControl>
     <contentType>text/plain</contentType>
-    <description>Example input for AOC Day 5</description>
+    <description>Example input for AOC 2021 Day 5</description>
 </StaticResource>

@@ -70,5 +70,16 @@ public virtual class AOC_Base{
         return result;
     }
 
+    /**
+     * While Apex' Math.round() does round to the nearest neighbor, on 'equal distance' aka 0.5 it rounds
+     * to the even neighbor, instead to always round up. Hence, this doesn't behave like standard mathematics.
+     * This method allows to round() to the nearest neighbor AND up when exactly 0.5.
+     */
+    protected Integer roundToInteger( Decimal value ){
+        // Integer.valueOf() simply cuts the decimal values 1.9 > 1; hence, add 0.5 and then strip all decimal values
+        // This way 1.5 becomes 2.0 and is stripped to 2; while 1.2 becomes 1.7 and thus remains 1;
+        return Integer.valueOf( value + 0.5 );
+    }
+
     public class InvalidDataException extends Exception{}
 }

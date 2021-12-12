@@ -59,6 +59,17 @@ public virtual class AOC_Base{
         return outputList;
     }
 
+    /**
+     * Method to easily add an Object into a List stored within a Map
+     */
+    public static void addToListInMap( Map<String, List<String>> inputMap, String keyString, String valString ){
+        if( inputMap.containsKey( keyString ) ){
+            inputMap.get( keyString ).add( valString );
+        } else{
+            inputMap.put( keyString, new List<String>{ valString } );
+        }
+    }
+
     protected Integer binaryToInteger( String value ){
         Integer result;
         if( String.isNotBlank( value ) && value.containsOnly( '01' ) ){

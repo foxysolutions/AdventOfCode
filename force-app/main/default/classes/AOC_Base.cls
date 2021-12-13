@@ -19,6 +19,10 @@ public virtual class AOC_Base{
     };
 
     /**
+     * INPUT PROCESSING
+     */
+
+    /**
      * Most crucial method of them all. Parsing the input file to some Apex-comfortable format.
      * Due to Exception checks, extending classes can assume inputLines are correctly formatted.
      *
@@ -60,6 +64,10 @@ public virtual class AOC_Base{
     }
 
     /**
+     * COLLECTION SUPPORT
+     */
+
+    /**
      * Method to easily add an Object into a List stored within a Map
      */
     public static void addToListInMap( Map<String, List<String>> inputMap, String keyString, String valString ){
@@ -70,6 +78,9 @@ public virtual class AOC_Base{
         }
     }
 
+    /**
+     * CONVERSION SUPPORT
+     */
     protected Integer binaryToInteger( String value ){
         Integer result;
         if( String.isNotBlank( value ) && value.containsOnly( '01' ) ){
@@ -93,4 +104,118 @@ public virtual class AOC_Base{
     }
 
     public class InvalidDataException extends Exception{}
+
+
+    /**
+     * REUSABLE DATA STRUCTURES
+     */
+    /**
+     * Inner Coordinate class to easily 'share' x-y coords without need of String manipulations (split, etc.) and casting (to Integer)
+     */
+    public class Coordinate{
+        public Integer x;
+        public Integer y;
+        public Coordinate( Integer xInput, Integer yInput ){
+            this.x = xInput;
+            this.y = yInput;
+        }
+        public Coordinate( String coordInput ){
+            List<String> coords = coordInput.split( ',' );
+            this.x = Integer.valueOf( coords[ 0 ] );
+            this.y = Integer.valueOf( coords[ 1 ] );
+        }
+
+        public String getString(){
+            return this.x + ',' + this.y;
+        }
+    }
+
+    /**
+     * VISUALIZATION / DEBUG MECHANISMS
+     */
+    /**
+     * Method to plot a List of Coordinates onto a visual Matrix, independent of coordinate-ranges (like console.table)
+     * 1) Loop over all coordinates and add them to a List<List<>> structure for easier display
+     *      Ensure the index exists before populating the value
+     * 2) Optionally construct the header and row logic to show nicely, without causing space-imperfections
+     * 3) Loop over the matrix rows and columns and display nicely in debug
+     *
+     * @param coordLines    (Req.) List of Coordinates which should be displayed
+     * @param filledChar    (Opt.) Character to show when Coordinate was in the input-list; default 'x'; should be max 1 character
+     * @param emptyChar     (Opt.) Character to show for all Coordinates not in the input-list; default ' '; should be max 1 character
+     * @param showIndices   (Opt.) Boolean to indicate whether indices should be shown as header (column-index) and line-prefix (row-index)
+     */
+    public void displayListCoordinates( List<Coordinate> coordLines ){
+        this.displayListCoordinates( coordLines, 'x', ' ', true );
+    }
+    public void displayListCoordinates( List<Coordinate> coordLines, String filledChar, String emptyChar, Boolean showIndices ){
+        // Convert Coordinates-List to Matrix (aka List<List<>>), ensuring the Matrix has sufficient rows and columns
+        List<List<String>> matrix = new List<List<String>>();
+        for( Integer i = 0, j = coordLines.size(); i < j; i++ ){
+            Coordinate coord = coordLines[ i ];
+            // Ensure there are sufficient rows to fit the y-coordinate
+            if( matrix.size() - 1 < coord.y ){
+                for( Integer n = matrix.size(), m = coord.y; n <= m; n++ ){
+                    matrix.add( new List<String>() );
+                }
+            }
+            // Ensure there are sufficient columns for this row to fit the x-coordinate
+            if( matrix[ coord.y ].size() - 1 < coord.x ){ // size() is always +1 compared to 'lastIndex'
+                // For completeness (and consistency) ensure all rows have sufficient columns
+                for( Integer r = 0, p = matrix.size(); r < p; r++ ){
+                    List<String> columnsOfRow = matrix[ r ];
+                    for( Integer c = columnsOfRow.size(), d = coord.x; c <= d; c++ ){
+                        columnsOfRow.add( emptyChar );
+                    }
+                }
+            }
+            // Set filled-character in the x,y location
+            matrix[ coord.y ][ coord.x ] = filledChar;
+        }
+        // After full matrix-construction/conversion - dump the table!
+        System.debug( LoggingLevel.INFO, 'MATRIX OUTPUT' );
+        Integer numRowDigits = String.valueOf( matrix.size() ).length() + 1; // set to 3 if 100 to ensure the table is properly aligned + 1 for nicer looks
+        if( showIndices ){ // Draft index header
+            Integer numColums = matrix[ 0 ].size();
+
+            // Construct the 'header-rows' to indicate the hundreds and tens to allow a vertical index-construction to avoid column-width issues
+            List<String> hundredIndicators = new List<String>();
+            List<String> tenIndicators = new List<String>();
+            List<String> singleIndicators = new List<String>();
+            List<String> axisNumberSeparator = new List<String>();
+
+            for( Integer i = 0; i < numColums; i++ ){
+                // In case a round hundred/ten increase (e.g. 100, 200, 300), store that number; same for tens
+                hundredIndicators.add( ( Math.mod( i, 100 ) == 0 ) ? String.valueOf( i / 100 ) : ' ' );
+                tenIndicators.add( ( Math.mod( i, 10 ) == 0 ) ? String.valueOf( i / 10 ) : ' ' );
+                singleIndicators.add( String.valueOf( Math.mod( i, 10 ) ) );
+                axisNumberSeparator.add( '-' );
+            }
+
+            // Construct header-prefix to make sure the header and value rows align nicely (value rows are preceided with rownumber)
+            String headerPrefix = this.lPad( '', numRowDigits, ' ' ) + '  '; // add number of spaces for number of RowDigits + 2 for 'clarity'
+            if( numColums > 100 ){  System.debug( LoggingLevel.INFO, headerPrefix + String.join( hundredIndicators, ' ' ) ); }
+            if( numColums > 10 ){   System.debug( LoggingLevel.INFO, headerPrefix + String.join( tenIndicators, ' ' ) ); }
+            System.debug( LoggingLevel.INFO, headerPrefix + String.join( singleIndicators, ' ' ) );
+            // Dump a line between header index numbers and matrix-values
+            System.debug( LoggingLevel.INFO, headerPrefix + String.join( axisNumberSeparator, ' ' ) );
+        }
+
+        for( Integer r = 0, p = matrix.size(); r < p; r++ ){
+            System.debug( LoggingLevel.INFO,
+                ( ( showIndices ) ? this.lPad( String.valueOf( r ), numRowDigits, ' ' ) + '  ' : '' )
+                + String.join( matrix[ r ], ' ' ) );
+        }
+    }
+
+    /**
+     * Method to centralise the prefixing of a text value to ensure the total width/length of that text matches the input-requirement
+     */
+    public String lPad( String text, Integer length, String paddingCharacter ){
+        String result = String.isBlank( text ) ? '' : text;
+        while( result.length() < length ){
+            result = paddingCharacter + result;
+        }
+        return result;
+    }
 }

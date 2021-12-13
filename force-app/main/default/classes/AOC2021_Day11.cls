@@ -156,16 +156,4 @@ public with sharing class AOC2021_Day11 extends AOC_Base{
         }
         return numFlashes;
     }
-
-    /**
-     * Inner Coordinate class to easily 'share' x-y coords without need of String manipulations (split, etc.) and casting (to Integer)
-     */
-    private class Coordinate{
-        private Integer x;
-        private Integer y;
-        public Coordinate( Integer xInput, Integer yInput ){
-            this.x = xInput;
-            this.y = yInput;
-        }
-    }
 }

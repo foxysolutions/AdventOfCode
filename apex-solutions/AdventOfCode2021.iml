@@ -9,7 +9,7 @@
         <option name="moduleContents">
           <ModuleContents>
             <option name="contentSelectionType" value="PACKAGE_XML" />
-            <option name="packageXmlRelativePath" value="manifest/package.xml" />
+            <option name="packageXmlRelativePath" value="apex-solutions/manifest/package.xml" />
           </ModuleContents>
         </option>
       </configuration>
@@ -22,6 +22,8 @@
       <sourceFolder url="file://$MODULE_DIR$/force-app/main/default" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/manifest" type="java-resource" />
     </content>
+    <content url="file://$MODULE_DIR$/../challenges" />
+    <content url="file://$MODULE_DIR$/../other-solutions" />
     <orderEntry type="jdk" jdkName="IlluminatedCloud (AdventOfCode2021/Reiniers_AdventOfCode)" jdkType="IlluminatedCloud" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

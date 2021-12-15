@@ -22,7 +22,7 @@ public with sharing class AOC2021_Day05 extends AOC_Base{
     }
 
     public void part1(){
-        Map<String, Integer> occurrencePerCoordinate = new Map<String, Integer>();
+        Map<String, Long> occurrencePerCoordinate = new Map<String, Long>();
 
         for( Integer i = 0, j = inputLines.size(); i < j; i++ ){
             String str = inputLines[ i ];
@@ -45,11 +45,12 @@ public with sharing class AOC2021_Day05 extends AOC_Base{
                     toCoord = originalFrom;
                 }
                 for( ; fromCoord <= toCoord; fromCoord++ ){
-                    this.increaseCounterWithKey(
+                    this.increaseCounter(
                         occurrencePerCoordinate,
                         ( ( xAxisMatch )
                             ? fixedCoord + ',' + fromCoord
-                            : fromCoord + ',' + fixedCoord )
+                            : fromCoord + ',' + fixedCoord ),
+                        1
                     );
                 }
             }
@@ -57,7 +58,7 @@ public with sharing class AOC2021_Day05 extends AOC_Base{
 
         // Loop over processed coordinates and count each coordinate which occurred 2+ times
         Integer count = 0;
-        for( Integer numOccurrences : occurrencePerCoordinate.values() ){
+        for( Long numOccurrences : occurrencePerCoordinate.values() ){
             if( numOccurrences > 1 ){
                 count++;
             }
@@ -67,7 +68,7 @@ public with sharing class AOC2021_Day05 extends AOC_Base{
     }
 
     public void part2(){
-        Map<String, Integer> occurrencePerCoordinate = new Map<String, Integer>();
+        Map<String, Long> occurrencePerCoordinate = new Map<String, Long>();
 
         for( Integer i = 0, j = inputLines.size(); i < j; i++ ){
             // Process input line to from and to coordinate and initiate local variables to reduce number of recurring List-retrieval operations
@@ -88,11 +89,11 @@ public with sharing class AOC2021_Day05 extends AOC_Base{
             // When only one axis changes, the sequence of processing the other doesn't batter (forward/backward), hence process always incremental for simplicity
             if( xFrom == xTo ){ // Only vertical movement, since x-axis remains the same
                 for( Integer yMin = Math.min( yFrom, yTo ), yMax = Math.max( yFrom, yTo ); yMin <= yMax; yMin++ ){
-                    this.increaseCounterWithKey( occurrencePerCoordinate, xFrom + ',' + yMin );
+                    this.increaseCounter( occurrencePerCoordinate, xFrom + ',' + yMin, 1 );
                 }
             } else if( yFrom == yTo ){ // Only horizontal movement, since y-axis remains the same
                 for( Integer xMin = Math.min( xFrom, xTo ), xMax = Math.max( xFrom, xTo ); xMin <= xMax; xMin++ ){
-                    this.increaseCounterWithKey( occurrencePerCoordinate, xMin + ',' + yFrom );
+                    this.increaseCounter( occurrencePerCoordinate, xMin + ',' + yFrom, 1 );
                 }
             } else{ // When both axes have movement, this can only be 45* aka diagonal movement, by input definition
                 // Then, as explained above, both axes should increase/decrease each iteration (see example)
@@ -101,7 +102,7 @@ public with sharing class AOC2021_Day05 extends AOC_Base{
                 Boolean xAxisIncrease = ( xFrom < xTo );
                 Boolean yAxisIncrease = ( yFrom < yTo );
                 for( Integer n = 0, numCoordinatesInRange = Math.abs( xTo - xFrom ) + 1; n < numCoordinatesInRange; n++ ){
-                    this.increaseCounterWithKey( occurrencePerCoordinate, xFrom + ',' + yFrom );
+                    this.increaseCounter( occurrencePerCoordinate, xFrom + ',' + yFrom, 1 );
                     xFrom += ( xAxisIncrease ) ? 1 : -1;
                     yFrom += ( yAxisIncrease ) ? 1 : -1;
                 }
@@ -110,21 +111,13 @@ public with sharing class AOC2021_Day05 extends AOC_Base{
 
         // Loop over the 'dummy matrix' where the number of overlap is 2+
         Integer count = 0;
-        for( Integer numOccurrences : occurrencePerCoordinate.values() ){
+        for( Long numOccurrences : occurrencePerCoordinate.values() ){
             if( numOccurrences > 1 ){
                 count++;
             }
         }
 
         System.debug( '*** Answer part 2: ' + count );
-    }
-
-    private void increaseCounterWithKey( Map<String, Integer> countMap, String key ){
-        Integer currentValue = countMap.get( key );
-        if( currentValue == null ){
-            currentValue = 0;
-        }
-        countMap.put( key, currentValue + 1 );
     }
 
     /**

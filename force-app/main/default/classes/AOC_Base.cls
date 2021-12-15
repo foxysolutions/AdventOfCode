@@ -70,12 +70,21 @@ public virtual class AOC_Base{
     /**
      * Method to easily add an Object into a List stored within a Map
      */
-    public static void addToListInMap( Map<String, List<String>> inputMap, String keyString, String valString ){
+    protected void addToListInMap( Map<String, List<String>> inputMap, String keyString, String valString ){
         if( inputMap.containsKey( keyString ) ){
             inputMap.get( keyString ).add( valString );
         } else{
             inputMap.put( keyString, new List<String>{ valString } );
         }
+    }
+
+    /**
+     * Method to easily increase a Counter in a Map based on the provided Key, to avoid duplicate containsKey() scattered through code
+     */
+    protected void increaseCounter( Map<String, Long> countMap, String key, Long numToAdd ){
+        Long currentValue = countMap.get( key );
+        if( currentValue == null ){ currentValue = 0; }
+        countMap.put( key, ( currentValue + numToAdd ) );
     }
 
     /**

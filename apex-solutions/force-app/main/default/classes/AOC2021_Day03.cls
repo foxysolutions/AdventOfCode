@@ -56,8 +56,8 @@ public with sharing class AOC2021_Day03 extends AOC_Base{
         }
 
         // Convert Binary output to Integer and output the product
-        Integer gamma = this.binaryToInteger( gammaRate_mostCommon );
-        Integer epsilon = this.binaryToInteger( epsilonRate_leastCommon );
+        Long gamma = this.binaryToLong( gammaRate_mostCommon );
+        Long epsilon = this.binaryToLong( epsilonRate_leastCommon );
         System.debug( '*** Answer part 1: gamma: ' + gamma + ' * epsilon: ' + epsilon + ' = ' + gamma * epsilon );
     }
 
@@ -71,8 +71,8 @@ public with sharing class AOC2021_Day03 extends AOC_Base{
             }
         }
 
-        Integer oxygenPower = this.getPowerFromInput( inputsParsed.clone(), true );
-        Integer co2Power = this.getPowerFromInput( inputsParsed.clone(), false );
+        Long oxygenPower = this.getPowerFromInput( inputsParsed.clone(), true );
+        Long co2Power = this.getPowerFromInput( inputsParsed.clone(), false );
         System.debug( '*** Answer part 2: oxygen: ' + oxygenPower + ' * co2Power: ' + co2Power + ' = ' + oxygenPower * co2Power );
     }
 
@@ -86,7 +86,7 @@ public with sharing class AOC2021_Day03 extends AOC_Base{
          *                      Note, when equal number of occurrences with TRUE the 1s continue, with FALSE the 0s continue
          * @return Integer which was represented by the one binary-row which shared the most/least occurrences
          */
-        private Integer getPowerFromInput( List<List<String>> inputs, Boolean highestWins ){
+        private Long getPowerFromInput( List<List<String>> inputs, Boolean highestWins ){
             Integer colIndex = 0;
             Integer numColumns = inputs[ 0 ].size();
             do{
@@ -109,6 +109,6 @@ public with sharing class AOC2021_Day03 extends AOC_Base{
             } while( inputs.size() > 1 && colIndex < numColumns );
 
             // When the single matching input is found, or when the last column was reached, return the first remaining binary-value-input as Integer
-            return this.binaryToInteger( String.join( inputs[ 0 ], '' ) );
+            return this.binaryToLong( String.join( inputs[ 0 ], '' ) );
         }
 }

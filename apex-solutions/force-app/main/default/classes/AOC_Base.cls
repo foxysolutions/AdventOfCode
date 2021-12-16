@@ -90,8 +90,8 @@ public virtual class AOC_Base{
     /**
      * CONVERSION SUPPORT
      */
-    protected Integer binaryToInteger( String value ){
-        Integer result;
+    protected Long binaryToLong( String value ){
+        Long result;
         if( String.isNotBlank( value ) && value.containsOnly( '01' ) ){
             result = 0;
             for( String s : value.split( '' ) ){

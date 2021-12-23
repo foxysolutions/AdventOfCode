@@ -140,6 +140,75 @@ public virtual class AOC_Base{
     }
 
     /**
+     * Inner Cube class to centralise logic on Cubes (aka Coordinate ranges) and logic to detect overlap and split
+     */
+    public class Cube{
+        List<Integer> xRange;
+        List<Integer> yRange;
+        List<Integer> zRange;
+
+        public Cube( List<Integer> xInput, List<Integer> yInput, List<Integer> zInput ){
+            this.xRange = xInput;
+            this.yRange = yInput;
+            this.zRange = zInput;
+        }
+
+        public Long getNumCoordinates(){
+            return ( Long ) ( this.xRange[ 1 ] - this.xRange[ 0 ] + 1 )
+                * ( this.yRange[ 1 ] - this.yRange[ 0 ] + 1 )
+                * ( this.zRange[ 1 ] - this.zRange[ 0 ] + 1 );
+        }
+
+        /**
+         * Method to determine whether the current and input Cubes overlap and returning the Cubical which is in both ranges
+         */
+        public Cube getSharedCube( Cube c ){
+            // First check whether the Cubes overlap (if any of the axis doesn't overlap, the full cubes can't overlap)
+            if( this.xRange[ 0 ] > c.xRange[ 1 ] || this.xRange[ 1 ] < c.xRange[ 0 ]
+                || this.yRange[ 0 ] > c.yRange[ 1 ] || this.yRange[ 1 ] < c.yRange[ 0 ]
+                || this.zRange[ 0 ] > c.zRange[ 1 ] || this.zRange[ 1 ] < c.zRange[ 0 ] ){
+                return null;
+            }
+            // Return the coordinates which are shared (Max of lowerbound and Min of upperbound)
+            return new Cube(
+                new List<Integer>{ Math.max( this.xRange[ 0 ], c.xRange[ 0 ] ), Math.min( this.xRange[ 1 ], c.xRange[ 1 ] ) },
+                new List<Integer>{ Math.max( this.yRange[ 0 ], c.yRange[ 0 ] ), Math.min( this.yRange[ 1 ], c.yRange[ 1 ] ) },
+                new List<Integer>{ Math.max( this.zRange[ 0 ], c.zRange[ 0 ] ), Math.min( this.zRange[ 1 ], c.zRange[ 1 ] ) }
+            );
+        }
+
+        public List<Cube> splitToNotOverlapWith( Cube c ){
+            // First check whether the input Cube has overlap, if so continue with the shared ranges
+            Cube overlappingCoords = this.getSharedCube( c );
+            if( overlappingCoords == null ){
+                // When there is no overlap in cube ranges, simply continue using the current Cube ranges
+                return new List<Cube>{ this };
+            }
+            // When there are overlapping ranges, split to multiple smaller cubes so there are no overlapping ranges with the input Cube
+            List<Cube> cubeSplits = new List<Cube>();
+            if( this.xRange[ 0 ] < overlappingCoords.xRange[ 0 ] ){
+                cubeSplits.add( new Cube( new List<Integer>{ this.xRange[ 0 ], overlappingCoords.xRange[ 0 ] - 1 }, this.yRange, overlappingCoords.zRange ) );
+            }
+            if( overlappingCoords.xRange[ 1 ] < this.xRange[ 1 ] ){
+                cubeSplits.add( new Cube( new List<Integer>{ overlappingCoords.xRange[ 1 ] + 1, this.xRange[ 1 ] }, this.yRange, overlappingCoords.zRange ) );
+            }
+            if( this.yRange[ 0 ] < overlappingCoords.yRange[ 0 ] ){
+                cubeSplits.add( new Cube( overlappingCoords.xRange, new List<Integer>{ this.yRange[ 0 ], overlappingCoords.yRange[ 0 ] - 1 }, overlappingCoords.zRange ) );
+            }
+            if( overlappingCoords.yRange[ 1 ] < this.yRange[ 1 ] ){
+                cubeSplits.add( new Cube( overlappingCoords.xRange, new List<Integer>{ overlappingCoords.yRange[ 1 ] + 1, this.yRange[ 1 ] }, overlappingCoords.zRange ) );
+            }
+            if( this.zRange[ 0 ] < overlappingCoords.zRange[ 0 ] ){
+                cubeSplits.add( new Cube( this.xRange, this.yRange, new List<Integer>{ this.zRange[ 0 ], overlappingCoords.zRange[ 0 ] - 1 } ) );
+            }
+            if( overlappingCoords.zRange[ 1 ] < this.zRange[ 1 ] ){
+                cubeSplits.add( new Cube( this.xRange, this.yRange, new List<Integer>{ overlappingCoords.zRange[ 1 ] + 1, this.zRange[ 1 ] } ) );
+            }
+            return cubeSplits;
+        }
+    }
+
+    /**
      * VISUALIZATION / DEBUG MECHANISMS
      */
     /**

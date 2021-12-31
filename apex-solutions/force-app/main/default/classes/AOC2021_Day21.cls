@@ -83,7 +83,7 @@ public with sharing class AOC2021_Day21 extends AOC_Base{
      * Queueables are used to solve as much as possible and then chain a next one to allow up till 5 times 60 seconds
      *
      * Unfortunately, both todays' inputs (Example and Real) have one iteration which costs more than 60 seconds on it's own...
-     * Still committed the code, since the first 3 throws of Real Input are feasible in one Queueable
+     * Still committed the code, since the first 2 throws of Real Input are feasible in one Queueable
      */
     public void part2(){
         // Determine input when in instance-mode and having inputLines available; not needed afterwards
@@ -122,7 +122,7 @@ public with sharing class AOC2021_Day21 extends AOC_Base{
             this.posp2 = posp2;
             this.currRollFrequencyIndex = lastInProcessRFIndex;
             this.numWinsPrevAsync = numPrevWins;
-            System.debug( '*** New Instance: positions ['+ this.posP1 + ', '+ this.posP2 + ']; and CumThrow Index '+ this.currRollFrequencyIndex + '; previous wins '+ numPrevWins );
+            System.debug( '*** New Instance: positions [' + this.posP1 + ', ' + this.posP2 + ']; and CumThrow Index ' + this.currRollFrequencyIndex + '; previous wins ' + numPrevWins );
         }
 
         public void execute( QueueableContext ctx ){
@@ -200,7 +200,7 @@ public with sharing class AOC2021_Day21 extends AOC_Base{
                 winState[ 0 ] += swappedWinState[ 1 ] * rollFrequency.throwFrequency;
                 winState[ 1 ] += swappedWinState[ 0 ] * rollFrequency.throwFrequency;
                 if( isRootRecursion ){
-                    System.debug( '*** Completed iteration it with swapped win ' + swappedWinState );
+                    System.debug( '*** Completed iteration with swapped win ' + swappedWinState );
                     // Increase current Cumulative Dice Combinations as next Async Job would need to continue there
                     currRollFrequencyIndex++;
                 }
@@ -209,3 +209,30 @@ public with sharing class AOC2021_Day21 extends AOC_Base{
         }
     }
 }
+/**
+DEBUG LOGS when running part1() and part2():
+
+Anonymous Apex:
+*** Answer part 1: 916 * 1005 = 920580
+*** Performing part2() Asynchronous, so check Logs for created Queueable
+*** New Instance: positions [5, 3]; and CumThrow Index 0; previous wins null
+*** Completed in 42
+
+First Queueable:
+*** Starting Player 1 iteration for 3 - current CPU: 12/60000
+*** Completed iteration with swapped win (9881516866, 79296121763)
+*** Starting Player 1 iteration for 4 - current CPU: 28394/60000
+*** Completed iteration with swapped win (783940300, 8000898413)
+*** Starting Player 1 iteration for 5 - current CPU: 37096/60000
+*** CPU Time limit was nearly reached, hence break: 59901 / 60000
+*** Apex CPU Limit was almost reached, hence triggered new Async Job to continue
+*** New Instance: positions [5, 3]; and CumThrow Index 2; previous wins (103298817002, 12233337766)
+*** Completed this Queueable in 64172
+
+Second Queueable:
+*** Starting Player 1 iteration for 5 - current CPU: 9/60000
+*** CPU Time limit was nearly reached, hence break: 59901 / 60000
+*** Apex CPU Limit was almost reached, hence triggered new Async Job to continue
+*** New Instance: positions [5, 3]; and CumThrow Index 2; previous wins (103298817002, 12233337766)
+*** Completed this Queueable in 63921
+*/

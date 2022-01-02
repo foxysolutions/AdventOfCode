@@ -9,7 +9,6 @@
  *
  * Performance: 83 ms & 2100 ms
  */
-const fs = require( 'fs' );
 const utils = require( './utils.js' );
 
 const PriorityQueue = require( 'priorityqueuejs' );

@@ -6,7 +6,6 @@
  *
  * Performance: 26 sec & 12 min
  */
-const fs = require( 'fs' );
 const utils = require( './utils.js' );
 const dijkstra = require( './dijkstra.js' );
 

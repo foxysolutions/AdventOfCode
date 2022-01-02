@@ -124,18 +124,32 @@ public virtual class AOC_Base{
     public class Coordinate{
         public Integer x;
         public Integer y;
+        public Integer z;
         public Coordinate( Integer xInput, Integer yInput ){
+            this( xInput, yInput, null );
+        }
+        public Coordinate( Integer xInput, Integer yInput, Integer zInput ){
             this.x = xInput;
             this.y = yInput;
+            this.z = zInput;
         }
         public Coordinate( String coordInput ){
             List<String> coords = coordInput.split( ',' );
             this.x = Integer.valueOf( coords[ 0 ] );
             this.y = Integer.valueOf( coords[ 1 ] );
+            if( coords.size() == 3 ){
+                this.z = Integer.valueOf( coords[ 2 ] );
+            }
         }
 
         public String getString(){
-            return this.x + ',' + this.y;
+            return this.x + ',' + this.y + ( ( this.z != null ) ? ',' + this.z : '' );
+        }
+        public Long getManhattanDistance( Coordinate coordToCompare ){
+            // Note z is optional in implementation. When filled in current, assume filled for comparison
+            return Math.abs( this.x - coordToCompare.x )
+                + Math.abs( this.y - coordToCompare.y )
+                + ( ( this.z != null ) ? Math.abs( this.z - coordToCompare.z ) : 0 );
         }
     }
 

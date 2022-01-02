@@ -124,18 +124,26 @@ public virtual class AOC_Base{
     public class Coordinate{
         public Integer x;
         public Integer y;
+        public Integer z;
         public Coordinate( Integer xInput, Integer yInput ){
+            this( xInput, yInput, null );
+        }
+        public Coordinate( Integer xInput, Integer yInput, Integer zInput ){
             this.x = xInput;
             this.y = yInput;
+            this.z = zInput;
         }
         public Coordinate( String coordInput ){
             List<String> coords = coordInput.split( ',' );
             this.x = Integer.valueOf( coords[ 0 ] );
             this.y = Integer.valueOf( coords[ 1 ] );
+            if( coords.size() == 3 ){
+                this.z = Integer.valueOf( coords[ 2 ] );
+            }
         }
 
         public String getString(){
-            return this.x + ',' + this.y;
+            return this.x + ',' + this.y + ( ( this.z != null ) ? ',' + this.z : '' );
         }
     }
 
@@ -223,14 +231,37 @@ public virtual class AOC_Base{
      * @param emptyChar     (Opt.) Character to show for all Coordinates not in the input-list; default ' '; should be max 1 character
      * @param showIndices   (Opt.) Boolean to indicate whether indices should be shown as header (column-index) and line-prefix (row-index)
      */
+    public List<Coordinate> handleNegativeCoordinates( List<Coordinate> coordLines ){
+        Integer xDelta = 0, yDelta = 0;
+        for( Integer i = 0, j = coordLines.size(); i < j; i++ ){
+            Coordinate coord = coordLines[ i ];
+            if( coord.x < 0 ){
+                xDelta = Math.max( -1 * coord.x, xDelta );
+            }
+            if( coord.y < 0 ){
+                yDelta = Math.max( -1 * coord.y, yDelta );
+            }
+        }
+        // No shifting needed, aka, there were no negative coords
+        if( xDelta == 0 && yDelta == 0 ){
+            return coordLines;
+        }
+        List<Coordinate> newCoords = new List<Coordinate>();
+        for( Integer i = 0, j = coordLines.size(); i < j; i++ ){
+            Coordinate coord = coordLines[ i ];
+            newCoords.add( new Coordinate( coord.x + xDelta, coord.y + yDelta ) );
+        }
+        return newCoords;
+    }
     public void displayListCoordinates( List<Coordinate> coordLines ){
         this.displayListCoordinates( coordLines, 'x', ' ', true );
     }
     public void displayListCoordinates( List<Coordinate> coordLines, String filledChar, String emptyChar, Boolean showIndices ){
+        List<Coordinate> coordsToDisplay = this.handleNegativeCoordinates( coordLines );
         // Convert Coordinates-List to Matrix (aka List<List<>>), ensuring the Matrix has sufficient rows and columns
         List<List<String>> matrix = new List<List<String>>();
-        for( Integer i = 0, j = coordLines.size(); i < j; i++ ){
-            Coordinate coord = coordLines[ i ];
+        for( Integer i = 0, j = coordsToDisplay.size(); i < j; i++ ){
+            Coordinate coord = coordsToDisplay[ i ];
             // Ensure there are sufficient rows to fit the y-coordinate
             if( matrix.size() - 1 < coord.y ){
                 for( Integer n = matrix.size(), m = coord.y; n <= m; n++ ){

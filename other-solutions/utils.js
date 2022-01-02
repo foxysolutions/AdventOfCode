@@ -43,4 +43,19 @@ getInputRunmode = () => {
     }
 }
 
-module.exports = { constructCoordString, splitCoordString, constructInputFileName, getCurrentTime, getDuration, getInputLines, getInputRunmode };
+consoleLogSameLine = ( line ) => {
+    process.stdout.clearLine();
+    process.stdout.cursorTo( 0 );
+    process.stdout.write( line );
+}
+
+module.exports = {
+    // Coordinates processing
+    constructCoordString, splitCoordString,
+    // Input processing
+    constructInputFileName, getInputLines, getInputRunmode,
+    // Duration processing
+    getCurrentTime, getDuration,
+    // Debug/print functions
+    consoleLogSameLine
+};

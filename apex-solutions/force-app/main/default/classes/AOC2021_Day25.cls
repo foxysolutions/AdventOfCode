@@ -16,7 +16,7 @@ public with sharing class AOC2021_Day25 extends AOC_Base{
         this.setInputLines( 'AOC2021_Day25' );
     }
 
-    enum DIRECTION {
+    enum DIRECTION{
         EAST,
         SOUTH
     }
@@ -49,17 +49,6 @@ public with sharing class AOC2021_Day25 extends AOC_Base{
     }
 
     public void part1(){
-        System.debug( '*** Performing Async, but no response expected due to CPU Timeout' );
-        AOC2021_Day25.part1_Async();
-    }
-
-    @Future
-    public static void part1_Async(){
-        AOC2021_Day25 inst = new AOC2021_Day25( MODE.FOR_REAL );
-        inst.performPart1();
-    }
-
-    public void performPart1(){
         Set<String> cucumberPerCoord = new Set<String>();
         List<CucumberSpot> cucumbersEast = new List<CucumberSpot>();
         List<CucumberSpot> cucumbersSouth = new List<CucumberSpot>();
@@ -83,26 +72,94 @@ public with sharing class AOC2021_Day25 extends AOC_Base{
             }
         }
 
-        Integer iteration = 0;
-        Boolean cucumberMoved;
-        do{
-            cucumberMoved = false;
-            Set<String> startState = cucumberPerCoord.clone();
-            for( Integer i = 0, j = cucumbersEast.size(); i < j; i++ ){
-                if( cucumbersEast[ i ].performStep( cucumberPerCoord, startState ) ){
-                    cucumberMoved = true;
-                }
-            }
-            // reset state to make sure all East steps are already taken into account;
-            startState = cucumberPerCoord.clone();
-            for( Integer i = 0, j = cucumbersSouth.size(); i < j; i++ ){
-                if( cucumbersSouth[ i ].performStep( cucumberPerCoord, startState ) ){
-                    cucumberMoved = true;
-                }
-            }
-            iteration++;
-        } while( cucumberMoved );
+        System.debug( '*** Input is processed and Queueable will be triggered to handle logic Asynchronous' );
+        System.enqueueJob( new Queue_SeaCucumberMovement( cucumberPerCoord, cucumbersEast, cucumbersSouth, 0 ) );
+    }
 
-        System.debug( '*** Answer part 1: ' + iteration );
+    public void part2(){
+        System.debug( '*** Note, todays\' puzzle has no part2(), it\'s time for Christmas!' );
+    }
+
+    public class Queue_SeaCucumberMovement implements Queueable{
+        Integer iteration;
+        Set<String> cucumberPerCoord = new Set<String>();
+        List<CucumberSpot> cucumbersEast = new List<CucumberSpot>();
+        List<CucumberSpot> cucumbersSouth = new List<CucumberSpot>();
+        Integer MAX_CPU_LIMIT;
+
+        /**
+         * Constructor for Queueable class to allow continuation at a certain stage
+         */
+        public Queue_SeaCucumberMovement( Set<String> cucumberPerCoord, List<CucumberSpot> cucumbersEast, List<CucumberSpot> cucumbersSouth, Integer iterCount ){
+            this.cucumberPerCoord = cucumberPerCoord;
+            this.cucumbersEast = cucumbersEast;
+            this.cucumbersSouth = cucumbersSouth;
+            this.iteration = iterCount;
+            System.debug( '*** New Instance: iteration ' + this.iteration + '; ' +
+                'cucumbersEast ' + this.cucumbersEast.size() + '; ' +
+                'cucumbersSouth ' + this.cucumbersSouth.size() + '; ' +
+                'total Coords ' + this.cucumberPerCoord.size() );
+        }
+
+        public void execute( QueueableContext ctx ){
+            Long start = System.now().getTime();
+            // Only define CPU Limit within Execute() as initiation is initially performed in Synchronous mode (thus 10s instead of 60s)
+            this.MAX_CPU_LIMIT = Limits.getLimitCpuTime();
+
+            Boolean cucumberMoved;
+            do{
+                // First verify whether there is sufficient time left for next iteration
+                Long currDuration = System.now().getTime() - start;
+                if( currDuration >= this.MAX_CPU_LIMIT * 0.99 ){ // Each iteration takes about approx. 600 sec, thus 1% should be saved as backup
+                    System.debug( '*** Ending current Queueable and triggering new one ' + currDuration + '/' + MAX_CPU_LIMIT );
+                    System.enqueueJob( new Queue_SeaCucumberMovement( this.cucumberPerCoord, this.cucumbersEast, this.cucumbersSouth, this.iteration ) );
+                    return;
+                }
+
+                cucumberMoved = false;
+                // Set state to make sure one East-step in this iteration doesn't effect a later East-Moving Sea Cucumber in the same iteration
+                Set<String> startState = cucumberPerCoord.clone();
+                for( Integer i = 0, j = cucumbersEast.size(); i < j; i++ ){
+                    if( cucumbersEast[ i ].performStep( cucumberPerCoord, startState ) ){
+                        cucumberMoved = true;
+                    }
+                }
+                // Reset state to make sure all East steps are already taken into account;
+                startState = cucumberPerCoord.clone();
+                for( Integer i = 0, j = cucumbersSouth.size(); i < j; i++ ){
+                    if( cucumbersSouth[ i ].performStep( cucumberPerCoord, startState ) ){
+                        cucumberMoved = true;
+                    }
+                }
+                iteration++;
+            } while( cucumberMoved );
+
+            System.debug( '*** Answer part 1: ' + iteration );
+            System.debug( '*** Completed in ' + ( System.now().getTime() - start ) );
+        }
     }
 }
+/**
+DEBUG LOGS when running part1() for Real data:
+
+Anonymous Apex:
+*** Input is processed and Queueable will be triggered to handle logic Asynchronous
+*** New Instance: iteration 0; cucumbersEast 4730; cucumbersSouth 4727; total Coords 9457
+*** Completed in 1091
+
+First Queueable:
+*** Ending current Queueable and triggering new one 59470/60000
+*** New Instance: iteration 112; cucumbersEast 4730; cucumbersSouth 4727; total Coords 9457
+
+Second Queueable:
+*** Ending current Queueable and triggering new one 59429/60000
+*** New Instance: iteration 244; cucumbersEast 4730; cucumbersSouth 4727; total Coords 9457
+
+Third Queueable:
+*** Ending current Queueable and triggering new one 59832/60000
+*** New Instance: iteration 359; cucumbersEast 4730; cucumbersSouth 4727; total Coords 9457
+
+Fourth Queueable:
+*** Answer part 1: 435
+*** Completed in 31573
+*/

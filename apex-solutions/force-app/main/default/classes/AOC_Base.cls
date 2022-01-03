@@ -66,6 +66,13 @@ public virtual class AOC_Base{
     /**
      * COLLECTION SUPPORT
      */
+    protected void addToFrontOfList( List<Object> l, Object newValue ){
+        if( l.isEmpty() ){
+            l.add( newValue );
+        } else{
+            l.add( 0, newValue );
+        }
+    }
 
     /**
      * Method to easily add an Object into a List stored within a Map

@@ -26,6 +26,11 @@ getInputLines = ( staticResourceName ) => {
     return fileContent.split( /\r?\n/ );
 }
 
+getInputLines = ( year, day ) => {
+    const fileContent = fs.readFileSync( '../challenges/' + year + '/' + constructInputFileName( year, day ), 'UTF-8' );
+    return fileContent.split( /\r?\n/ );
+}
+
 const MODE_REAL = 'real';
 const MODE_EXAMPLE = 'example';
 getInputRunmode = () => {

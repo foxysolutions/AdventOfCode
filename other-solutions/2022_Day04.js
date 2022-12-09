@@ -32,10 +32,7 @@ solvePuzzle02 = () => {
         let elfRanges = line.split( ',' );
         let elf1 = elfRanges[ 0 ].split( '-' ).map( n => parseInt( n, 10 ) );
         let elf2 = elfRanges[ 1 ].split( '-' ).map( n => parseInt( n, 10 ) );
-        if( ( elf1[ 0 ] <= elf2[ 0 ] && elf2[ 0 ] <= elf1[ 1 ] )
-            || ( elf1[ 0 ] <= elf2[ 1 ] && elf2[ 1 ] <= elf1[ 1 ] )
-            || ( elf2[ 0 ] <= elf1[ 0 ] && elf1[ 0 ] <= elf2[ 1 ] )
-            || ( elf2[ 0 ] <= elf1[ 0 ] && elf1[ 0 ] <= elf2[ 1 ] ) ){
+        if( elf1[ 1 ] >= elf2[ 0 ] && elf2[ 1 ] >= elf1[ 0 ] ){
             numOverlap++;
         }
     } );

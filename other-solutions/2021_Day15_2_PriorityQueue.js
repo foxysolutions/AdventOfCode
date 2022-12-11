@@ -79,7 +79,7 @@ let startTime = utils.getCurrentTime();
 
 // Get input data and set program standards
 const numRepetition = 5;
-const matrix = utils.getInputLines( utils.constructInputFileName( '2021', '15' ) )
+const matrix = utils.getInputLinesApex( utils.constructInputFileName( '2021', '15' ) )
     .map( line => line.split( '' )
         .map( n => parseInt( n, 10 ) ) );
 

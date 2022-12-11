@@ -18,7 +18,7 @@ performMovementsTillAllStuck = () => {
     // and skipping South-Moving when checking East-Moving and vice versa
     let eastMoving = [];
     let southMoving = [];
-    let inputLines = utils.getInputLines( utils.constructInputFileName( '2021', '25' ) );
+    let inputLines = utils.getInputLinesApex( utils.constructInputFileName( '2021', '25' ) );
     const maxX = inputLines[ 0 ].length;
     const maxY = inputLines.length;
     inputLines.forEach( ( line, y ) => line.split( '' ).forEach( ( elem, x ) => {

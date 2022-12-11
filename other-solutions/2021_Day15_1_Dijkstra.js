@@ -10,7 +10,7 @@ const utils = require( './utils.js' );
 const dijkstra = require( './dijkstra.js' );
 
 // Transform input file to costGraph
-const matrix = utils.getInputLines( utils.constructInputFileName( '2021', '15' ) )
+const matrix = utils.getInputLinesApex( utils.constructInputFileName( '2021', '15' ) )
     .map( line => line.split( '' )
         .map( n => parseInt( n, 10 ) ) );
 

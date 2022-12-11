@@ -1,11 +1,11 @@
 /**
-* Script for Day 11
+* Script for Day 05
 * Call script with expected runmode
-* node 2022_Day11.js 0
-* node 2022_Day11.js 1
+* node 2022_Day05.js 0
+* node 2022_Day05.js 1
 */
 const utils = require( './utils.js' );
-const inputLines = utils.getInputLines( '2022', '11' );
+const inputLines = utils.getInputLines( '2022', '05' );
 
 var stacks = [];
 var movements = [];

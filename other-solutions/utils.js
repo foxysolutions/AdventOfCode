@@ -73,9 +73,9 @@ getInputRunmode = () => {
         return MODE_REAL;
     } else if( scriptParams.length == 3 ){
     	let runMode = scriptParams[ 2 ]; // real or example
-    	if( runMode = '0' ){
+    	if( runMode === '0' ){
             return MODE_EXAMPLE;
-        } else if( runMode = '1' ){
+        } else if( runMode === '1' ){
             return MODE_REAL;
         } else if( runMode != MODE_REAL && runMode != MODE_EXAMPLE ){
             throw Exception( 'Please provide a valid run mode' );

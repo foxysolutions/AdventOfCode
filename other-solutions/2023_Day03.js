@@ -49,14 +49,13 @@ const convertInputToMatrix = () => {
         matrix.push( line.split( '' ) );
 
         // Detect all Integers in the row by regex and store both index and position
-        let lastIndex = 0;
-        line.match( REGEX_NUM )?.forEach( ( num ) => {
-           // Get index of number, skipping all previous to prevent partial matches like ..159..30..15
-           // Ensure to set lastIndex AFTER the number to prevent partial match within the last number like ..834..4
-           numIndex = line.indexOf( num, lastIndex );
-           lastIndex = numIndex + num.length;
-           numPositions.push( { x: numIndex, y: row, num: Number( num ), len: num.length } );
-        } );
+        // Originally implemented with line.match().forEach(), which required indexOf to find the index
+        //      This caused challenges on ..159..30..15 and ..834..4.. - thus a lastIndex was kept of the index + length
+        //      Then indexOf( num, lastIndex )  was applied to prevent a partial match with an ending of or an earlier number
+        // Eventually heard about the exec() method, which required a while-loop; but also about matchAll() which did the trick!
+        for( elem of line.matchAll( REGEX_NUM ) ){ // elem: [ num, index:, input:, groups: ]
+            numPositions.push( { x: elem.index, y: row, num: Number( elem[ 0 ] ), len: elem[ 0 ].length } );
+        };
     } );
     matrixLengthX = matrix[ 0 ].length;
     matrixLengthY = matrix.length;

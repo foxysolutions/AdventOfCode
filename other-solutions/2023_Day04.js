@@ -54,8 +54,8 @@ const convertLinesToCards = () => {
     inputLines.forEach( ( line, i ) => {
         let [ winningString, cardString ] = line.split( ': ' )[ 1 ].split( ' | ');
         cards.push( {
-            winningNums: winningString.split( /\s+/ ),
-            cardNums:    cardString.split( /\s+/ )
+            winningNums: winningString.trim().split( /\s+/ ),
+            cardNums:    cardString.trim().split( /\s+/ )
         } );
     } );
 }

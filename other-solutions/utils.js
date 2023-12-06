@@ -33,7 +33,7 @@ consoleLogSameLine = ( line ) => {
  */
 constructInputFileName = ( year, day, inputMode = null ) => {
     if( inputMode == null ){ inputMode = getInputRunmode(); }
-    return 'AOC' + year + '_Day' + day + '_' + inputMode;
+    return day + '_Data_' + inputMode;
 }
 
 getInputFileLocation = ( year, day, inputMode = null ) => {
@@ -49,6 +49,11 @@ getInputLines = ( year, day ) => {
 getInputLinesApex = ( staticResourceName ) => {
     const fileContent = fs.readFileSync( '../apex-solutions/force-app/main/default/staticresources/'+ staticResourceName + '.resource', 'UTF-8' );
     return fileContent.split( /\r?\n/ );
+}
+constructInputFileNameApex = ( year, day, inputMode = null ) => {
+    if( inputMode == null ){ inputMode = getInputRunmode(); }
+    // Added year indication, since stored as static resources in single org
+    return 'AOC' + year + '_Day' + day + '_' + inputMode;
 }
 
 createInputFiles = ( year, day ) => {
@@ -111,16 +116,15 @@ const utils = require( './utils.js' );
 const inputLines = utils.getInputLines( '{year}', '{day}' );
 
 solvePuzzle01 = () => {
-    inputLines.forEach( ( line ) => {
+    inputLines.forEach( ( line, i ) => {
        
     } );
 
     return null;
 }
 
-
 solvePuzzle02 = () => {
-    inputLines.forEach( ( line ) => {
+    inputLines.forEach( ( line, i ) => {
 
     } );
 

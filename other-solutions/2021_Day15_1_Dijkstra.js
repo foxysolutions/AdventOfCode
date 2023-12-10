@@ -7,7 +7,7 @@
  * Performance: 26 sec & 12 min
  */
 const utils = require( './utils.js' );
-const dijkstra = require( './dijkstra.js' );
+const dijkstra = require( './utils_path_algorithms.js' );
 
 // Transform input file to costGraph
 const matrix = utils.getInputLinesApex( utils.constructInputFileNameApex( '2021', '15' ) )

@@ -84,4 +84,28 @@ const shortestDistanceNode = ( distances, visited ) => {
     return shortest;
 };
 
-module.exports = { findShortestPath };
+/**
+ * Breadth First Search
+ */
+const breadthFirstSearch = ( graph, start ) => {
+    const queue = [ start ];
+    const visited = new Set();
+    const result = [];
+
+    while( queue.length > 0 ){
+        const vertex = queue.shift();
+
+        if( !visited.has( vertex ) ){
+            visited.add( vertex );
+            result.push( vertex );
+
+            for( const neighbor of graph[ vertex ] ){
+                queue.push( neighbor );
+            }
+        }
+    }
+
+    return result;
+}
+
+module.exports = { findShortestPath, breadthFirstSearch };

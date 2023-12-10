@@ -4,11 +4,24 @@ const fs = require( 'fs' );
  * Input processing methods
  */
 constructCoordString = ( x, y ) => {
-    return x + ',' + y;
+    return `${x},${y}`;
 }
 
 splitCoordString = ( coordString ) => {
     return coordString.split( ',' ).map( n => parseInt( n, 10 ) );
+}
+
+getCoordFromString = ( xy ) => {
+    let coordSplit = splitCoordString( xy );
+    return constructCoordObject( coordSplit[ 0 ], coordSplit[ 1 ], xy );
+}
+
+constructCoordObject = ( x, y, xy = null ) => {
+    return { x: x, y: y, name: ( ( xy ) ? xy : constructCoordString( x, y ) ) };
+}
+
+coordDelta = ( start, neighbor ) => {
+    return { x: neighbor.x - start.x, y: neighbor.y - start.y };
 }
 
 /**
@@ -94,6 +107,7 @@ getInputRunmode = () => {
 module.exports = {
     // Coordinates processing
     constructCoordString, splitCoordString,
+    getCoordFromString, constructCoordObject, coordDelta,
     // Input processing
     constructInputFileName, getInputLines, getInputRunmode,
     // Duration processing
